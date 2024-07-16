@@ -70,55 +70,73 @@ const StudentForm = () => {
   const filteredStudents = students.filter((student) => student.name.toLowerCase().includes(search));
 
   return (
-    <div>
-      <h2>Student Marks Form</h2>
+    <div className="container mt-5">
+      <h2 className="mb-4">Student Marks Form</h2>
       <form onSubmit={handleSubmit}>
-        <div>
+        <div className="form-group">
           <label>Name: </label>
-          <input type="text" name="name" value={student.name} onChange={(e) => handleChange(e)} required />
+          <input type="text" className="form-control" name="name" value={student.name} onChange={(e) => handleChange(e)} required />
         </div>
         {student.subjects.map((subject, index) => (
-          <div key={index}>
-            <label>Subject: </label>
-            <input type="text" name="subject" value={subject.subject} onChange={(e) => handleChange(e, index)} required />
-            <label>Marks: </label>
-            <input type="number" name="marks" value={subject.marks} onChange={(e) => handleChange(e, index)} required min="0" max="100" />
-            <button type="button" onClick={() => handleRemoveSubject(index)}>
-              Remove
-            </button>
+          <div className="form-row mb-3" key={index}>
+            <div className="col">
+              <label>Subject: </label>
+              <input type="text" className="form-control" name="subject" value={subject.subject} onChange={(e) => handleChange(e, index)} required />
+            </div>
+            <div className="col">
+              <label>Marks: </label>
+              <input type="number" className="form-control" name="marks" value={subject.marks} onChange={(e) => handleChange(e, index)} required min="0" max="100" />
+            </div>
+            <div className="col-auto align-self-end">
+              <button type="button" className="btn btn-danger" onClick={() => handleRemoveSubject(index)}>
+                Remove
+              </button>
+            </div>
           </div>
         ))}
-        <button type="button" onClick={handleAddSubject}>
+        <button type="button" className="btn btn-primary mb-3" onClick={handleAddSubject}>
           Add Subject
         </button>
-        <button type="submit">{isEditing ? "Update Student" : "Add Student"}</button>
+        <button type="submit" className="btn btn-success">
+          {isEditing ? "Update Student" : "Add Student"}
+        </button>
       </form>
 
-      <h4>Search students</h4>
-      <input type="text" name="search" onChange={handleSearch} value={search} />
+      <h4 className="mt-5">Search students</h4>
+      <input type="text" className="form-control mb-3" name="search" onChange={handleSearch} value={search} />
 
       <h2>Students List</h2>
-      <ul>
+      <ul className="list-group">
         {filteredStudents.map((s, index) => {
           const totalMarks = calculateTotalMarks(s.subjects);
           const averagePercentage = calculateAveragePercentage(totalMarks, s.subjects.length);
           const isPass = averagePercentage >= 35;
 
           return (
-            <li key={index}>
-              <div>{s.name}</div>
-              <ul>
-                {s.subjects.map((sub, subIndex) => (
-                  <li key={subIndex}>
-                    {sub.subject} - {sub.marks}%
-                  </li>
-                ))}
-              </ul>
-              <div>Total Marks: {totalMarks}</div>
-              <div>Average Percentage: {averagePercentage.toFixed(2)}%</div>
-              <div>Status: {isPass ? "Pass" : "Fail"}</div>
-              <button onClick={() => handleEdit(index)}>Edit</button>
-              <button onClick={() => handleDelete(index)}>Delete</button>
+            <li key={index} className="list-group-item">
+              <div className="d-flex justify-content-between">
+                <div>
+                  <strong>{s.name}</strong>
+                  <ul>
+                    {s.subjects.map((sub, subIndex) => (
+                      <li key={subIndex}>
+                        {sub.subject} - {sub.marks}%
+                      </li>
+                    ))}
+                  </ul>
+                  <div>Total Marks: {totalMarks}</div>
+                  <div>Average Percentage: {averagePercentage.toFixed(2)}%</div>
+                  <div>Status: {isPass ? "Pass" : "Fail"}</div>
+                </div>
+                <div>
+                  <button className="btn btn-warning mr-2" onClick={() => handleEdit(index)}>
+                    Edit
+                  </button>
+                  <button className="btn btn-danger" onClick={() => handleDelete(index)}>
+                    Delete
+                  </button>
+                </div>
+              </div>
             </li>
           );
         })}
